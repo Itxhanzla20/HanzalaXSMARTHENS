@@ -10,15 +10,20 @@ using namespace std;
 5. input validation
 */
 
-string users[100], passwords[100];
+string users[100], passwords[100]  ;
+int visitCounts[100] = {0};
 int totalUsers = 0;
+int userIndex = 0;
 
 void Menu();
 void signUp(string user, string password);
 bool signIn(string user, string password);
 bool isUserPresent(string user);
-bool isuseradmin(string user, string password);
+bool isAdmin(string user, string password);
 void isuser();
+void editCustomer(int index);
+void viewAllCustomers();
+void userManagement();
 
 int main()
 {
@@ -85,15 +90,12 @@ void signUp(string user, string password)
 
 bool signIn(string user, string password)
 {
-    if (user == "admin" && password == "1234")
+    if (isAdmin(user, password))
     {
-
-        isuseradmin(user, password);
         return true;
     }
     for (int i = 0; i < totalUsers; i++)
     {
-
         if (users[i] == user)
         {
             if (passwords[i] == password)
@@ -105,7 +107,7 @@ bool signIn(string user, string password)
         }
     }
     cout << "Invalid user or password" << endl;
-   
+
     return false;
 }
 
@@ -129,24 +131,106 @@ void Menu()
     cout << "Enter your choice: ";
 }
 
-bool isuseradmin(string email, string password)
+bool isAdmin(string email, string password)
+{
+    if (email == "admin" && password == "1234")
+    {
+        int choice;
+        cout << "Welcome Admin :))\n";
+        cout << "1. USER MANAGEMENT\n";
+        cout << "2. ORDER MANAGEMENT\n";
+        cout << "3. INVENTORY MANAGEMENT\n";
+        cout << "4. DISCOUNTS AND OFFERS MANAGEMENT\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        if (choice == 1)
+        {
+            userManagement();
+        }
+        else
+        {
+            cout << "Feature not implemented yet.\n";
+        }
+
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+void isuser()
 {
     int choice;
-    cout << "Welcome hanzala:))\n";
-    cout << "1.USER MANAGEMENT\n";
-    cout << "2.ORDER MANAGEMENT\n";
-    cout << "3.INVENTORY MANAGEMENT\n";
-    cout << "4.DISCOUNTS AND OFFERS MANAGEMENT\n";
-    cout << "Enter your choice :";
+    cout << "1. ACCOUNT MANAGEMENT\n";
+    cout << "2. MENU EXPLORATION\n";
+    cout << "3. DINE IN OR TAKEAWAY\n";
+    cout << "4. THANK YOU FEEL FREE TO GIVE ANY SUGGESTIONS\n";
+    cout << "Enter your choice: ";
     cin >> choice;
-    return true;
 }
-void isuser(){
-    int choice;
-    cout << "1.ACCOUNT MANAGMENT\n";
-    cout << "2.MENU EXPLORATION\n";
-    cout << "3.DINE IN OR TAKEAWAY\n";
-    cout << "4.THANK YOU FEEL FREE TO GIVE ANY SUGESSTIONS\n";
-    cout<<" Enter your choice :\n";
-    cin>>choice;
+
+void userManagement()
+{
+    int option;
+
+    do
+    {
+        cout << "\n--- USER MANAGEMENT MENU ---\n";
+        cout << "1. View All Customers\n";
+        cout << "2. Edit Customer Details\n";
+        cout << "3. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> option;
+
+        switch (option)
+        {
+        case 1:
+            viewAllCustomers();
+            break;
+        case 2:
+            cout << "Enter customer number (1-" << totalUsers << "): ";
+            cin >> userIndex;
+
+            if (userIndex >= 1 && userIndex <= totalUsers)
+            {
+                editCustomer(userIndex - 1);
+            }
+            else
+            {
+                cout << "Invalid user number!\n";
+            }
+            break;
+        case 3:
+            cout << "Exiting User Management...\n";
+            break;
+        default:
+            cout << "Invalid choice. Please try again.\n";
+        }
+
+    } while (option != 3);
+}
+
+void viewAllCustomers()
+{
+    cout << "\n--- User List ---\n";
+    for (int i = 0; i < totalUsers; i++)
+    {
+        cout << i + 1 << ". " << users[i] << " (Visits: " << visitCounts[i] << ")\n";
+    }
+    cout << "---------------------\n";
+}
+
+void editCustomer(int index)
+{
+    
+
+    cout << "Enter new email: ";
+    cin >> users[index];
+
+   
+
+    cout << "Customer details updated successfully!\n";
 }
